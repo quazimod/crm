@@ -408,17 +408,20 @@ function createTableRow(client) {
 }
 
 function createTable(clientsList) {
+  const tableWrapper = document.createElement('div')
+  tableWrapper.classList.add('table-wrapper')
   const tableElement = document.createElement('table')
   tableElement.classList.add('table')
   const tableHead = createTableHead(clientsList)
   tableElement.append(tableHead)
+  tableWrapper.append(tableElement)
 
   for (const client of clientsList) {
     const clientRow = createTableRow(client)
     tableElement.append(clientRow)
   }
 
-  return tableElement
+  return tableWrapper
 }
 
 function createContactElement() {
@@ -647,9 +650,9 @@ function createModalForm(client, modal) {
   saveClientBtn.addEventListener('click', (e) => {  
     e.preventDefault()
 
-    const clientName = document.getElementById('nameField').value.trim()
-    const clientSurname = document.getElementById('surnameField').value.trim()
-    const clientLastname = document.getElementById('lastNameField').value.trim()
+    let clientName = document.getElementById('nameField').value.trim()
+    let clientSurname = document.getElementById('surnameField').value.trim()
+    let clientLastname = document.getElementById('lastNameField').value.trim()
     const contactsItems = document.querySelectorAll('.contacts-item')
     const contactsList = []
 
@@ -678,6 +681,10 @@ function createModalForm(client, modal) {
         contactsList.push({ type: contactType, value: contactVal })
       }
     }
+
+    clientName = uppercaseFirst(clientName)
+    clientSurname = uppercaseFirst(clientSurname)
+    clientLastname = uppercaseFirst(clientLastname)
 
     const clientData = {
       id: client && client.id,
@@ -714,6 +721,10 @@ function createModalForm(client, modal) {
   }))
 
   return ({ form, btnGroup })
+}
+
+function uppercaseFirst(str) {
+  return str[0].toUpperCase() + str.slice(1)
 }
 
 function createNewClientModal() {
